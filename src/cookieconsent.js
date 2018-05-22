@@ -447,7 +447,9 @@
         }
 
         if (this.options.revokable) {
-          this.toggleRevokeButton();
+          this.toggleRevokeButton(true);
+        } else {
+          this.toggleRevokeButton(false);
         }
         this.options.onPopupOpen.call(this);
       }
@@ -561,7 +563,13 @@
 
     // opens the popup if no answer has been given
     CookiePopup.prototype.autoOpen = function(options) {
-      !this.hasAnswered() && this.options.enabled && this.open();
+     // !this.hasAnswered() && this.options.enabled && this.open();
+     // possible fix for keeping revoke button visible between refreshes
+      if (!this.hasAnswered() && this.options.enabled) {
+         this.open();
+      } else if (this.hasAnswered() && this.options.revokable) {
+        this.toggleRevokeButton(true);
+      }
     };
 
     CookiePopup.prototype.setStatus = function(status) {
